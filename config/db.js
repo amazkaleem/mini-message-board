@@ -11,4 +11,8 @@ const messages = [
   }
 ];
 
-export default messages;
+async function getMessageDetails(messageText) {
+  return messages.find(message => message.text === messageText);
+};
+
+export { messages, getMessageDetails };
