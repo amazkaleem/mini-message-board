@@ -1,11 +1,32 @@
-<form method="POST" action="/new">
-  <div><label for="authorName">Author Name</label></div>
-  <input type="text" id="authorName" name="authorName" placeholder="Enter Author's Name" />
-  <br><br>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Form</title>
+  </head>
+  <body>
+    <%- include('partials/errors.ejs') %>
+    <form method="POST" action="/new">
+      <div><label for="authorName">Author Name</label></div>
+      <input
+        type="text"
+        id="authorName"
+        name="authorName"
+        placeholder="Enter Author's Name"
+      />
+      <br /><br />
 
-  <div><label for="messageText">Message</label></div>
-  <input type="text" id="messageText" name="messageText" placeholder="Enter Text" />
-  <br><br>
+      <div><label for="messageText">Message</label></div>
+      <input
+        type="text"
+        id="messageText"
+        name="messageText"
+        placeholder="Enter Text"
+      />
+      <br /><br />
 
-  <div><button type="submit">Submit</button></div>
-</form>
+      <div><button type="submit">Submit</button></div>
+    </form>
+  </body>
+</html>

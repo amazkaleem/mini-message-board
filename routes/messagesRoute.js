@@ -1,23 +1,48 @@
 import express from "express";
-import { messages } from "../config/db.js";
-import getMessageDetailsByName from "../controllers/messageController.js";
+import {
+  getMessageDetailsByName,
+  getMessageBoard,
+  getForm,
+  createMessage,
+} from "../controllers/messageController.js";
 import handleError from "../middleware/errorMiddleware.js";
+import { body, validationResult, matchedData, param } from "express-validator";
+
+const alphaErr = "must only contain letters";
+const messageErr = "can be up to 100 characters only";
+const nameErr = "can be upto to 20 characters only";
+
+const validateUser = [
+  body("authorName")
+    .trim()
+    .isAlpha()
+    .withMessage(`Author Name ${alphaErr}`)
+    .isLength({ min: 1, max: 20 })
+    .withMessage(`Name ${nameErr}`),
+  body("messageText")
+    .trim()
+    .isLength({ min: 1, max: 100 })
+    .withMessage(`Message ${messageErr}`),
+];
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.render("index", { title: "Mini Messageboard", messages: messages });
-});
+router.get("/", getMessageBoard);
 
-router.get("/new", (req, res) => {
-    res.render("form");
-});
+router.get("/new", getForm);
 
-router.post("/new", (req, res) => {
-    const { messageText, authorName } = req.body;
-    messages.push({ text: messageText, user: authorName, added: new Date() });
-    res.redirect("/");
-});
+router.post("/new", [
+  validateUser,
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).render("form", {
+        errors: errors.array()
+      });
+    }
+    await createMessage(req, res);
+  },
+]);
 
 router.get("/:messageText", getMessageDetailsByName);
 
